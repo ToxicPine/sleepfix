@@ -10,18 +10,18 @@ it provides a "sleep calculator" that simulates how Vitamin C timing and dosage 
 
 the simulation is based on pharmacokinetic models and allows users to adjust variables like medication dosage, body weight, and Vitamin C intake to see the potential impact on blood concentration levels over time.
 
-i modelled the impact of acidifying your urine on Vyvanse elimination using the model from Huang W, et al. (2020, Journal of Pharmacology and Experimental)
+i modelled the impact of acidifying your urine on Vyvanse elimination using the model from Huang W, et al. (2020, Journal of Pharmacology and Experimental).
 
 this is a tool for exploration and education. it is not medical advice.
 
 ## getting started
 
-it's available via [sleepfix.vercel.app](https://sleepfix.vercel.app)
+it's available at [sleepfix.vercel.app](https://sleepfix.vercel.app)
 
-this project uses NextJS and TailwindCSS
+this project uses NextJS and TailwindCSS.
 
 ## todo, maybe
 
-- [ ] simulate impact of other forms of medication (non-Vyvanse)
-- [ ] model the impact of other sleep-enhancement strategies
-- [ ] implement better graph components
+- [ ] simulate the pharmacokinetics of other stimulant medications, including those which contain Methylphenidate. 
+- [ ] model the impact of other sleep-enhancement strategies.
+- [ ] implement better graph components.

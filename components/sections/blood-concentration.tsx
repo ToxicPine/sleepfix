@@ -1,0 +1,73 @@
+import { ConcentrationChartDataPoint } from "@/lib/types/pharmacokinetics";
+import { ConcentrationChart } from "../charts/concentration-chart";
+import {
+  StyledCard,
+  StyledContent,
+  StyledDescription,
+  StyledTitle,
+  StyledHeader,
+  StyledCardProps,
+} from "../ui/styled-card";
+
+export interface BloodConcentrationProps {
+  data: ConcentrationChartDataPoint[];
+  dosingIntervalH: number;
+  estimatedSleepThresholdNgML: number;
+  customSleepThresholdNgML: number;
+  naiveSleepThresholdNgML: number;
+  cardSettings: StyledCardProps;
+  axisColors: {
+    axisColor: string;
+    axisLabelColor: string;
+  };
+  lineColors: {
+    steadyStateColor: string;
+    firstDoseColor: string;
+    steadyStateNoInterventionColor: string;
+    firstDayNoInterventionColor: string;
+  };
+}
+
+export function BloodConcentration({
+  data,
+  dosingIntervalH,
+  estimatedSleepThresholdNgML,
+  customSleepThresholdNgML,
+  naiveSleepThresholdNgML,
+  cardSettings,
+  axisColors,
+  lineColors,
+}: BloodConcentrationProps) {
+  return (
+    <StyledCard
+      cardPadding={cardSettings.cardPadding}
+      cardPerimeter={cardSettings.cardPerimeter}
+      cardBackground={cardSettings.cardBackground}
+      backgroundColor={cardSettings.backgroundColor}
+    >
+      <StyledHeader>
+        <StyledTitle>Concentration In Blood Over Time</StyledTitle>
+        <StyledDescription>
+          Track how Vitamin C affects drug levels throughout the day
+        </StyledDescription>
+      </StyledHeader>
+      <StyledContent className="h-80 sm:h-96">
+        <ConcentrationChart
+          data={data}
+          dosingIntervalH={dosingIntervalH}
+          estimatedSleepThresholdNgML={estimatedSleepThresholdNgML}
+          customSleepThresholdNgML={customSleepThresholdNgML}
+          naiveSleepThresholdNgML={naiveSleepThresholdNgML}
+          axisColor={axisColors.axisColor}
+          axisLabelColor={axisColors.axisLabelColor}
+          steadyStateColor={lineColors.steadyStateColor}
+          firstDoseColor={lineColors.firstDoseColor}
+          steadyStateNoInterventionColor={
+            lineColors.steadyStateNoInterventionColor
+          }
+          firstDayNoInterventionColor={lineColors.firstDayNoInterventionColor}
+        />
+      </StyledContent>
+    </StyledCard>
+  );
+}

@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sleepfix
 
-## Getting Started
+a next.js application for sleep health.
 
-First, run the development server:
+## about
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+this project investigates the claim that Vitamin C can counteract insomnia caused by adhd medications like Vyvanse or Adderall.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+it provides a "sleep calculator" that simulates how Vitamin C timing and dosage might lower amphetamine levels in the body, potentially making it easier to sleep.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+the simulation is based on pharmacokinetic models and allows users to adjust variables like medication dosage, body weight, and Vitamin C intake to see the potential impact on blood concentration levels over time.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+i modelled the impact of acidifying your urine on Vyvanse elimination using the model from Huang W, et al. (2020, Journal of Pharmacology and Experimental)
 
-## Learn More
+this is a tool for exploration and education. it is not medical advice.
 
-To learn more about Next.js, take a look at the following resources:
+## getting started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+it's available via [sleepfix.vercel.app](https://sleepfix.vercel.app)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+this project uses NextJS and TailwindCSS
 
-## Deploy on Vercel
+## todo, maybe
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] simulate impact of other forms of medication (non-Vyvanse)
+- [ ] model the impact of other sleep-enhancement strategies
+- [ ] implement better graph components

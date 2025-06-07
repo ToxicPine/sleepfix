@@ -22,6 +22,6 @@ this project uses NextJS and TailwindCSS.
 
 ## todo, maybe
 
-- [ ] simulate the pharmacokinetics of other stimulant medications, including those which contain Methylphenidate. 
+- [ ] simulate the pharmacokinetics of other stimulant medications, including those which contain Methylphenidate.
 - [ ] model the impact of other sleep-enhancement strategies.
 - [ ] implement better graph components.

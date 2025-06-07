@@ -8,6 +8,7 @@ import {
   StyledHeader,
   StyledCardProps,
 } from "../ui/styled-card";
+import colors from "tailwindcss/colors";
 
 export interface BloodConcentrationProps {
   data: ConcentrationChartDataPoint[];
@@ -17,14 +18,14 @@ export interface BloodConcentrationProps {
   naiveSleepThresholdNgML: number;
   cardSettings: StyledCardProps;
   axisColors: {
-    axisColor: string;
-    axisLabelColor: string;
+    axisColor: keyof typeof colors;
+    axisLabelColor: keyof typeof colors;
   };
   lineColors: {
-    steadyStateColor: string;
-    firstDoseColor: string;
-    steadyStateNoInterventionColor: string;
-    firstDayNoInterventionColor: string;
+    steadyStateColor: keyof typeof colors;
+    firstDoseColor: keyof typeof colors;
+    steadyStateNoInterventionColor: keyof typeof colors;
+    firstDayNoInterventionColor: keyof typeof colors;
   };
 }
 

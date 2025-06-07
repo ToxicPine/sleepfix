@@ -15,14 +15,15 @@ import {
   ReferenceLine,
 } from "recharts";
 import { PhTimeSeriesPoint } from "@/lib/types/pharmacokinetics";
+import colors from "tailwindcss/colors";
 
 dayjs.extend(duration);
 
 interface UrinePhChartProps {
   data: PhTimeSeriesPoint[];
   dosingIntervalH: number;
-  axisColor: string;
-  axisLabelColor: string;
+  axisColor: keyof typeof colors;
+  axisLabelColor: keyof typeof colors;
 }
 
 export function UrinePhChart({
@@ -36,48 +37,65 @@ export function UrinePhChart({
     [],
   );
 
+  const xAxisDomain = useMemo(() => [0, dosingIntervalH], [dosingIntervalH]);
   const xAxisTicks = useMemo(
     () => [0, 4, 8, 12, 16, 20, 24].filter((tick) => tick <= dosingIntervalH),
     [dosingIntervalH],
   );
+  /*const xAxisLabel = useMemo(
+    () => ({
+      value: "Time (h)",
+      position: "insideBottomRight",
+      style: { fontSize: 12, fill: colors[axisLabelColor][800] },
+    }),
+    [axisLabelColor],
+  );*/
+  const xAxisTickFormatter = useCallback((value: number) => `${value}h`, []);
 
   const yAxisDomain = useMemo(() => [4, 8], []);
   const yAxisTicks = useMemo(() => [4, 5, 6, 7, 8], []);
-
-  const yAxisLabelStyle = useMemo(
-    () => ({ fontSize: 12, fill: axisLabelColor }),
+  const yAxisLabel = useMemo(
+    () => ({
+      value: "Urine pH",
+      angle: -90,
+      position: "insideLeft",
+      style: { fontSize: 12, fill: colors[axisLabelColor][800] },
+    }),
     [axisLabelColor],
   );
-
-  const tooltipContentStyle = useMemo(
-    () => ({
-      backgroundColor: "rgba(255, 255, 255, 0.95)",
-      backdropFilter: "blur(8px)",
-      borderRadius: "12px",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-    }),
-    [],
-  );
-
-  const neutralPhLabelStyle = useMemo(
-    () => ({ fontSize: 10, fill: "#10b981" }),
-    [],
-  );
-
-  const acidicPhLabelStyle = useMemo(
-    () => ({ fontSize: 10, fill: "#ef4444" }),
-    [],
-  );
-
-  const activeDotStyle = useMemo(() => ({ r: 6, fill: "#f59e0b" }), []);
-
-  // Memoize formatters and callbacks
-  const xAxisTickFormatter = useCallback((value: number) => `${value}h`, []);
 
   const yAxisTickFormatter = useCallback(
     (value: number) => value.toFixed(1),
     [],
   );
+
+  const tooltipContentStyle = useMemo(
+    () => ({
+      padding: "12px",
+      display: "flex" as const,
+      flexDirection: "column" as const,
+      gap: "4px",
+      backgroundColor: colors[axisColor][50],
+      borderRadius: "16px",
+      border: `1px solid ${colors[axisColor][200]}`,
+      fontSize: "12px",
+      lineHeight: "1",
+      fontWeight: "500",
+    }),
+    [axisColor],
+  );
+
+  const neutralPhLabel = useMemo(
+    () => ({ fontSize: 10, fill: colors.green[600] }),
+    [],
+  );
+
+  const acidicPhLabel = useMemo(
+    () => ({ fontSize: 10, fill: colors.red[600] }),
+    [],
+  );
+
+  const activeDotStyle = useMemo(() => ({ r: 6, fill: colors.amber[600] }), []);
 
   const tooltipValueFormatter = useCallback(
     (value: number) => value.toFixed(2),
@@ -102,27 +120,28 @@ export function UrinePhChart({
       <LineChart data={data} margin={chartMargins}>
         <defs>
           <linearGradient id="phGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.3} />
+            <stop offset="0%" stopColor={colors.amber[500]} stopOpacity={0.8} />
+            <stop
+              offset="100%"
+              stopColor={colors.amber[500]}
+              stopOpacity={0.3}
+            />
           </linearGradient>
         </defs>
 
         <CartesianGrid
-          strokeDasharray="3 3"
-          stroke="#e5e7eb"
+          strokeDasharray="2 4"
+          stroke={colors[axisColor][800]}
+          strokeOpacity={0.25}
           vertical={false}
         />
 
         <XAxis
           dataKey="timeH"
-          domain={[0, dosingIntervalH]}
+          domain={xAxisDomain}
           ticks={xAxisTicks}
           tickFormatter={xAxisTickFormatter}
-          label={{
-            value: "Time (h)",
-            style: { fontSize: 12, fill: axisLabelColor },
-          }}
-          stroke={axisColor}
+          stroke={colors[axisColor][800]}
           fontSize={12}
           tickLine={false}
         />
@@ -131,13 +150,8 @@ export function UrinePhChart({
           domain={yAxisDomain}
           ticks={yAxisTicks}
           tickFormatter={yAxisTickFormatter}
-          label={{
-            value: "Urine pH",
-            angle: -90,
-            position: "insideLeft",
-            style: yAxisLabelStyle,
-          }}
-          stroke={axisColor}
+          label={yAxisLabel}
+          stroke={colors[axisColor][800]}
           fontSize={12}
           tickLine={false}
           axisLine={false}
@@ -147,35 +161,33 @@ export function UrinePhChart({
           formatter={tooltipValueFormatter}
           labelFormatter={tooltipLabelFormatter}
           contentStyle={tooltipContentStyle}
+          labelStyle={{
+            fontSize: 15,
+            marginBottom: "3px",
+            fontWeight: "500",
+          }}
+          itemStyle={{
+            fontSize: 12,
+            fontWeight: "500",
+          }}
         />
 
-        <Legend
-          content={hideLegend} // Hide legend for single line
-        />
+        <Legend content={hideLegend} />
 
-        {/* Reference lines for pH levels */}
         <ReferenceLine
           y={7}
-          stroke="#10b981"
+          stroke={colors.green[600]}
           strokeWidth={1.5}
           strokeDasharray="3 3"
-          label={{
-            value: "Neutral pH",
-            position: "right",
-            style: neutralPhLabelStyle,
-          }}
+          label={neutralPhLabel}
         />
 
         <ReferenceLine
           y={5.5}
-          stroke="#ef4444"
+          stroke={colors.red[600]}
           strokeWidth={1.5}
           strokeDasharray="3 3"
-          label={{
-            value: "Acidic",
-            position: "right",
-            style: acidicPhLabelStyle,
-          }}
+          label={acidicPhLabel}
         />
 
         {/* pH Line */}
@@ -183,8 +195,8 @@ export function UrinePhChart({
           type="monotone"
           dataKey="ph"
           name="Urine pH"
-          stroke="#f0b100"
-          strokeWidth={3}
+          stroke={colors.amber[500]}
+          strokeWidth={2}
           dot={false}
           activeDot={activeDotStyle}
         />
@@ -193,7 +205,7 @@ export function UrinePhChart({
         {data.length > 0 && (
           <ReferenceLine
             x={data[0].timeH}
-            stroke="#8b5cf6"
+            stroke={colors.purple[600]}
             strokeWidth={1}
             strokeDasharray="5 5"
             opacity={0}

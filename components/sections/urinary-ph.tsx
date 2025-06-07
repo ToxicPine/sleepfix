@@ -37,8 +37,8 @@ export function UrinaryPhComponent({
         <UrinePhChart
           data={data}
           dosingIntervalH={dosingIntervalH}
-          axisColor="#894b00"
-          axisLabelColor="#894b00"
+          axisColor="amber"
+          axisLabelColor="amber"
         />
       </StyledContent>
     </StyledCard>

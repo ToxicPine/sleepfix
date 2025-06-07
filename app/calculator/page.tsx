@@ -201,14 +201,14 @@ export default function VyvanseSleepSimulator() {
               backgroundColor: "green",
             }}
             axisColors={{
-              axisColor: "#016630",
-              axisLabelColor: "#016630",
+              axisColor: "green",
+              axisLabelColor: "green",
             }}
             lineColors={{
-              steadyStateColor: "#ff595e",
-              firstDoseColor: "#ffca3a",
-              steadyStateNoInterventionColor: "#8ac926",
-              firstDayNoInterventionColor: "#1982c4",
+              steadyStateColor: "red",
+              steadyStateNoInterventionColor: "orange",
+              firstDoseColor: "blue",
+              firstDayNoInterventionColor: "indigo",
             }}
           />
           <MedicationDetailsCard

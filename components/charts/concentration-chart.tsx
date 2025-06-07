@@ -14,8 +14,10 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import { ImplicitLabelType } from "recharts/types/component/Label";
 import { ConcentrationChartDataPoint } from "@/lib/types/pharmacokinetics";
 import { calculateConcentrationChartYAxisMax } from "@/lib/utils/chart-helpers";
+import colors from "tailwindcss/colors";
 
 // Enable duration plugin
 dayjs.extend(duration);
@@ -26,12 +28,12 @@ interface ConcentrationChartProps {
   estimatedSleepThresholdNgML: number; // ng/mL concentration threshold
   customSleepThresholdNgML: number; // ng/mL concentration threshold
   naiveSleepThresholdNgML: number; // ng/mL concentration threshold for calculation
-  axisColor: string;
-  axisLabelColor: string;
-  steadyStateColor: string;
-  firstDoseColor: string;
-  steadyStateNoInterventionColor: string;
-  firstDayNoInterventionColor: string;
+  axisColor: keyof typeof colors;
+  axisLabelColor: keyof typeof colors;
+  steadyStateColor: keyof typeof colors;
+  firstDoseColor: keyof typeof colors;
+  steadyStateNoInterventionColor: keyof typeof colors;
+  firstDayNoInterventionColor: keyof typeof colors;
 }
 
 // Memoized legend mapping to avoid recreation on every render
@@ -55,6 +57,22 @@ export function ConcentrationChart({
   steadyStateNoInterventionColor,
   firstDayNoInterventionColor,
 }: ConcentrationChartProps) {
+  const tooltipContentStyle = useMemo(
+    () => ({
+      padding: "12px",
+      display: "flex" as const,
+      flexDirection: "column" as const,
+      gap: "4px",
+      backgroundColor: colors[axisColor][50],
+      borderRadius: "16px",
+      border: `1px solid ${colors[axisColor][200]}`,
+      fontSize: "12px",
+      lineHeight: "1",
+      fontWeight: "500",
+    }),
+    [axisColor],
+  );
+
   // Calculate maxYAxisValue inside the component
   const maxYAxisValue = useMemo(
     () =>
@@ -78,40 +96,59 @@ export function ConcentrationChart({
     [],
   );
 
+  const xAxisDomain = useMemo(() => [0, dosingIntervalH], [dosingIntervalH]);
   const xAxisTicks = useMemo(
     () => [0, 4, 8, 12, 16, 20, 24].filter((tick) => tick <= dosingIntervalH),
     [dosingIntervalH],
   );
+  /*const xAxisLabel = useMemo(
+    () => ({
+      value: "Time (h)",
+      position: "insideBottomRight",
+      style: { fontSize: 12, fill: colors[axisLabelColor][800] },
+    }),
+    [axisLabelColor],
+  );*/
+  const xAxisTickFormatter = useCallback((value: number) => `${value}h`, []);
 
   const yAxisDomain = useMemo(
     () => [0, Math.ceil(maxYAxisValue)],
     [maxYAxisValue],
   );
+  const yAxisLabelStyle = useMemo(
+    () => ({
+      fontSize: 12,
+      fill: colors[axisLabelColor][800],
+      fontWeight: "500",
+      paddingBottom: "4px",
+      textAnchor: "middle" as const,
+      dominantBaseline: "middle" as const,
+      dx: -0,
+      dy: -0,
+    }),
+    [axisLabelColor],
+  );
+  const yAxisLabel = useMemo(
+    () => ({
+      value: "Concentration (ng/mL)",
+      angle: -90,
+      position: "insideLeft" as const,
+      style: yAxisLabelStyle,
+    }),
+    [yAxisLabelStyle],
+  );
+  const yAxisTickFormatter = useCallback((value: number) => `${value}`, []);
 
   // Memoize tooltip styles
-  const tooltipContentStyle = useMemo(
-    () => ({
-      backgroundColor: "rgba(255, 255, 255, 0.98)",
-      backdropFilter: "blur(12px)",
-      borderRadius: "16px",
-      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
-      border: "1px solid rgba(255, 255, 255, 0.2)",
-      fontSize: "13px",
-      fontWeight: "500",
-    }),
-    [],
-  );
-
   const legendWrapperStyle = useMemo(
     () => ({
-      paddingTop: "16px",
-      fontSize: "13px",
+      paddingTop: "8px",
+      fontSize: "12px",
       fontWeight: "500",
     }),
     [],
   );
 
-  // Memoize tooltip formatter
   const tooltipFormatter = useCallback(
     (value: number, name: string) => [
       `${value.toFixed(1)} ng/mL`,
@@ -120,7 +157,6 @@ export function ConcentrationChart({
     [],
   );
 
-  // Memoize label formatter
   const labelFormatter = useCallback((label: string | number) => {
     const hours = parseFloat(String(label));
     const dur = dayjs.duration(hours, "hours");
@@ -132,78 +168,55 @@ export function ConcentrationChart({
     return `Time: ${h}h ${m}m`;
   }, []);
 
-  // Memoize legend formatter
   const legendFormatter = useCallback((value: string) => {
     return LEGEND_MAP[value] || value;
   }, []);
 
-  // Memoize Y-axis label style
-  const yAxisLabelStyle = useMemo(
-    () => ({
-      fontSize: 13,
-      fill: axisLabelColor,
-      fontWeight: "500",
-    }),
-    [axisLabelColor],
-  );
-  const xAxisDomain = useMemo(() => [0, dosingIntervalH], [dosingIntervalH]);
-  const xAxisTickFormatter = useCallback((value: number) => `${value}h`, []);
-  const xAxisLineStyle = useMemo(
-    () => ({ stroke: axisColor, strokeOpacity: 0.5 }),
-    [axisColor],
-  );
-  const yAxisTickFormatter = useCallback((value: number) => `${value}`, []);
-  const yAxisLabel = useMemo(
-    () => ({
-      value: "Concentration (ng/mL)",
-      angle: -90,
-      position: "insideLeft" as const,
-      style: yAxisLabelStyle,
-    }),
-    [yAxisLabelStyle],
-  );
   const tooltipCursorStyle = useMemo(
     () => ({
-      stroke: axisColor,
+      stroke: colors[axisColor][800],
       strokeWidth: 1,
       strokeOpacity: 0.5,
       strokeDasharray: "3 3",
     }),
     [axisColor],
   );
-  const customThresholdLabel = useMemo(
+
+  const estimatedAbove = estimatedSleepThresholdNgML > customSleepThresholdNgML;
+
+  const customThresholdLabel = useMemo<ImplicitLabelType>(
     () => ({
       value: "Your Sleep Threshold",
-      position: "right" as const,
-      offset: 10,
+      position: estimatedAbove ? "insideTopLeft" : "insideBottomLeft",
+      offset: 6,
       style: {
-        fontSize: 12,
-        fill: "#8b5cf6",
+        fontSize: 10,
+        fill: colors.purple[600],
         fontWeight: 600,
         textShadow: "0 1px 2px rgba(255,255,255,0.8)",
       },
     }),
-    [],
+    [estimatedAbove],
   );
-  const estimatedThresholdLabel = useMemo(
+  const estimatedThresholdLabel = useMemo<ImplicitLabelType>(
     () => ({
       value: "Dose-Adjusted",
-      position: "left" as const,
-      offset: 10,
+      position: estimatedAbove ? "insideBottomLeft" : "insideTopLeft",
+      offset: 6,
       style: {
-        fontSize: 11,
-        fill: "#f59e0b",
+        fontSize: 10,
+        fill: colors.amber[600],
         fontWeight: 500,
         textShadow: "0 1px 2px rgba(255,255,255,0.8)",
       },
     }),
-    [],
+    [estimatedAbove],
   );
   const steadyStateActiveDot = useMemo(
     () => ({
       r: 7,
       fill: steadyStateColor,
-      stroke: "#fff",
+      stroke: colors.white,
       strokeWidth: 2,
       filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
     }),
@@ -213,7 +226,7 @@ export function ConcentrationChart({
     () => ({
       r: 6,
       fill: firstDoseColor,
-      stroke: "#fff",
+      stroke: colors.white,
       strokeWidth: 2,
       filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
     }),
@@ -257,8 +270,8 @@ export function ConcentrationChart({
 
         <CartesianGrid
           strokeDasharray="2 4"
-          stroke={axisColor}
-          strokeOpacity={0.3}
+          stroke={colors[axisColor][800]}
+          strokeOpacity={0.25}
           vertical={false}
         />
 
@@ -267,18 +280,18 @@ export function ConcentrationChart({
           domain={xAxisDomain}
           ticks={xAxisTicks}
           tickFormatter={xAxisTickFormatter}
-          stroke={axisColor}
+          stroke={colors[axisColor][800]}
           fontSize={12}
           fontWeight="500"
           tickLine={false}
-          axisLine={xAxisLineStyle}
+          axisLine={{ stroke: colors[axisColor][800] }}
         />
 
         <YAxis
           domain={yAxisDomain}
           tickFormatter={yAxisTickFormatter}
           label={yAxisLabel}
-          stroke={axisColor}
+          stroke={colors[axisColor][800]}
           fontSize={12}
           fontWeight="500"
           tickLine={false}
@@ -291,6 +304,15 @@ export function ConcentrationChart({
           contentStyle={tooltipContentStyle}
           cursor={tooltipCursorStyle}
           animationDuration={150}
+          itemStyle={{
+            fontSize: 12,
+            fontWeight: "500",
+          }}
+          labelStyle={{
+            fontSize: 15,
+            marginBottom: "3px",
+            fontWeight: "500",
+          }}
         />
 
         <Legend
@@ -302,17 +324,17 @@ export function ConcentrationChart({
         {/* Enhanced sleep threshold reference lines */}
         <ReferenceLine
           y={customSleepThresholdNgML}
-          stroke="#8b5cf6"
-          strokeWidth={2.5}
+          stroke={colors.purple[600]}
+          strokeWidth={1.5}
           strokeDasharray="6 4"
           label={customThresholdLabel}
         />
 
         <ReferenceLine
           y={estimatedSleepThresholdNgML}
-          stroke="#f59e0b"
-          strokeWidth={2}
-          strokeDasharray="4 4"
+          stroke={colors.amber[600]}
+          strokeWidth={1.5}
+          strokeDasharray="6 4"
           label={estimatedThresholdLabel}
         />
 
@@ -320,8 +342,8 @@ export function ConcentrationChart({
         <Line
           type="monotone"
           dataKey="steadyStateConcentrationNgML"
-          stroke={steadyStateColor}
-          strokeWidth={3.5}
+          stroke={colors[steadyStateColor][600]}
+          strokeWidth={2}
           dot={false}
           activeDot={steadyStateActiveDot}
           animationDuration={800}
@@ -330,9 +352,21 @@ export function ConcentrationChart({
 
         <Line
           type="monotone"
+          dataKey="steadyStateNoInterventionConcentrationNgML"
+          stroke={colors[steadyStateNoInterventionColor][600]}
+          strokeWidth={2}
+          strokeDasharray="6 4"
+          opacity={0.75}
+          dot={false}
+          activeDot={steadyStateNoInterventionActiveDot}
+          animationDuration={400}
+        />
+
+        <Line
+          type="monotone"
           dataKey="firstPeriodConcentrationNgML"
-          stroke={firstDoseColor}
-          strokeWidth={2.5}
+          stroke={colors[firstDoseColor][600]}
+          strokeWidth={2}
           dot={false}
           activeDot={firstDoseActiveDot}
           animationDuration={600}
@@ -341,23 +375,11 @@ export function ConcentrationChart({
 
         <Line
           type="monotone"
-          dataKey="steadyStateNoInterventionConcentrationNgML"
-          stroke={steadyStateNoInterventionColor}
-          strokeWidth={2}
-          strokeDasharray="6 4"
-          opacity={0.6}
-          dot={false}
-          activeDot={steadyStateNoInterventionActiveDot}
-          animationDuration={400}
-        />
-
-        <Line
-          type="monotone"
           dataKey="firstDayNoInterventionConcentrationNgML"
-          stroke={firstDayNoInterventionColor}
-          strokeWidth={1.5}
+          stroke={colors[firstDayNoInterventionColor][600]}
+          strokeWidth={2}
           strokeDasharray="4 4"
-          opacity={0.6}
+          opacity={0.7}
           dot={false}
           activeDot={firstDayNoInterventionActiveDot}
           animationDuration={400}

@@ -39,7 +39,7 @@ function ScienceBox({
 export function HowItWorksSection() {
   const scienceBoxes: ScienceBoxProps[] = [
     {
-      title: "How Your Body Clears The Medication",
+      title: "How Your Body Clears Vyvanse",
       content:
         "Your body flushes out ADHD drugs through your kidneys (mostly). The speed of this process varies significantly from person to person. If you can't fall asleep, it's probably because your body is eliminating the medication too slowly.",
       backgroundColor: "red",

@@ -73,7 +73,7 @@ export function StyledCard({
     <Card
       className={cn(
         "flex flex-col",
-        { "gap-1.5 p-4 md:gap-3 md:p-6": cardPadding === "default" },
+        { "gap-1.5 p-4 md:gap-2.5 md:p-6": cardPadding === "default" },
         { "gap-1 p-3 md:gap-1.5 md:p-4": cardPadding === "compact" },
         { "gap-1 p-3": cardPadding === "subcompact" },
         {
@@ -118,7 +118,7 @@ export function StyledHeader({
   return (
     <CardHeader
       className={cn(
-        "space-y-0.5",
+        "space-y-0.5 leading-tight",
         { "rounded-t-2xl": backgroundColor },
         { [bgStyles]: variant === "prominent" },
         {
@@ -155,7 +155,7 @@ export function StyledTitle({
     <CardTitle
       className={cn(
         "font-semibold leading-tight",
-        { "text-xl": size === "default" },
+        { "text-lg md:text-xl": size === "default" },
         { "text-md": size === "small" },
         { "text-sm": size === "tiny" },
         { "text-xs": size === "micro" },

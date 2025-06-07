@@ -2,6 +2,7 @@ import React from "react";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { COLORS } from "@/components/ui/color";
+import colors from "tailwindcss/colors";
 
 interface StyledSliderProps {
   label?: string;
@@ -67,29 +68,29 @@ export function StyledSlider({
   const getFillColor = () => {
     switch (color) {
       case "purple":
-        return "rgb(168 85 247)";
+        return colors.purple[500];
       case "blue":
-        return "rgb(59 130 246)"; // blue-500
+        return colors.blue[500];
       case "green":
-        return "rgb(34 197 94)"; // green-500
+        return colors.green[500];
       case "red":
-        return "rgb(239 68 68)"; // red-500
+        return colors.red[500];
       case "orange":
-        return "rgb(249 115 22)"; // orange-500
+        return colors.orange[500];
       case "pink":
-        return "rgb(236 72 153)"; // pink-500
+        return colors.pink[500];
       case "teal":
-        return "rgb(21 128 122)"; // teal-500
+        return colors.teal[500];
       case "yellow":
-        return "rgb(234 179 8)"; // yellow-500
+        return colors.yellow[500];
       case "violet":
-        return "rgb(139 92 246)"; // violet-500
+        return colors.violet[500];
       case "indigo":
-        return "rgb(79 70 229)"; // indigo-500
+        return colors.indigo[500];
       case "amber":
-        return "rgb(251 146 60)"; // amber-500
+        return colors.amber[500];
       default:
-        return "rgb(107 114 128)"; // gray-500
+        return colors.gray[500];
     }
   };
 

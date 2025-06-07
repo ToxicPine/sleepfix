@@ -253,7 +253,6 @@ export function ConcentrationChart({
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data} margin={chartMargins}>
         <defs>
-          {/* Optimized gradient definitions */}
           <linearGradient id="steadyStateGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={steadyStateColor} stopOpacity={0.9} />
             <stop

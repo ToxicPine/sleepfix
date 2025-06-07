@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { COLORS } from "@/components/ui/color";
@@ -57,42 +57,34 @@ export function StyledSlider({
   const percentage =
     ((props.value - props.min) / (props.max - props.min)) * 100;
 
-  // Clean gradient background with proper fill
-  const trackBackgroundClassName = cn(
-    "rounded-lg",
-    sizeConfig.track,
-    "bg-[linear-gradient(to_right,var(--fill-color)_0%,var(--fill-color)_var(--fill-percentage),rgb(191_191_191)_var(--fill-percentage),rgb(191_191_191)_100%)]",
-  );
+  const { fillColor, trackBgColor } = useMemo(() => {
+    const colorPalette =
+      color in colors ? colors[color as keyof typeof colors] : colors.gray;
+    let mutedColor = colorPalette[200];
 
-  // Get CSS color value for the fill
-  const getFillColor = () => {
-    switch (color) {
-      case "purple":
-        return colors.purple[500];
-      case "blue":
-        return colors.blue[500];
-      case "green":
-        return colors.green[500];
-      case "red":
-        return colors.red[500];
-      case "orange":
-        return colors.orange[500];
-      case "pink":
-        return colors.pink[500];
-      case "teal":
-        return colors.teal[500];
-      case "yellow":
-        return colors.yellow[500];
-      case "violet":
-        return colors.violet[500];
-      case "indigo":
-        return colors.indigo[500];
-      case "amber":
-        return colors.amber[500];
-      default:
-        return colors.gray[500];
+    if (typeof mutedColor === "string" && mutedColor.startsWith("oklch(")) {
+      const match = mutedColor.match(/oklch\(([^)]+)\)/);
+      if (match) {
+        const parts = match[1].split(/\s+/);
+        if (parts.length === 3) {
+          const l = parts[0];
+          const c = parseFloat(parts[1]);
+          const h = parts[2];
+          const mutedChroma = c * 0.5;
+          mutedColor = `oklch(${l} ${mutedChroma} ${h})`;
+        }
+      }
     }
-  };
+
+    return {
+      fillColor: colorPalette[500],
+      trackBgColor: mutedColor,
+    };
+  }, [color]);
+
+  const trackBackgroundClassName = cn("rounded-lg", sizeConfig.track, [
+    "bg-[linear-gradient(to_right,var(--fill-color)_0%,var(--fill-color)_var(--fill-percentage),var(--track-bg-color)_var(--fill-percentage),var(--track-bg-color)_100%)]",
+  ]);
 
   // Transparent input overlay
   const trackClassName = cn(
@@ -164,7 +156,8 @@ export function StyledSlider({
       style={
         {
           "--fill-percentage": `${percentage}%`,
-          "--fill-color": getFillColor(),
+          "--fill-color": fillColor,
+          "--track-bg-color": trackBgColor,
         } as React.CSSProperties
       }
     />

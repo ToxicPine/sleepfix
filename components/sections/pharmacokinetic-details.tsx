@@ -47,8 +47,10 @@ export function PharmacokineticDetails({
       backgroundColor={cardSettings.backgroundColor}
     >
       <StyledHeader>
-        <StyledTitle>Pharmacokinetic Details</StyledTitle>
-        <StyledDescription>
+        <StyledTitle textColor={cardSettings.backgroundColor}>
+          Pharmacokinetic Details
+        </StyledTitle>
+        <StyledDescription textColor={cardSettings.backgroundColor}>
           Key metrics showing how Vitamin C affects drug elimination
         </StyledDescription>
       </StyledHeader>

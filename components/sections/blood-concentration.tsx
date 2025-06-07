@@ -47,8 +47,10 @@ export function BloodConcentration({
       backgroundColor={cardSettings.backgroundColor}
     >
       <StyledHeader>
-        <StyledTitle>Concentration In Blood Over Time</StyledTitle>
-        <StyledDescription>
+        <StyledTitle textColor={cardSettings.backgroundColor}>
+          Concentration In Blood Over Time
+        </StyledTitle>
+        <StyledDescription textColor={cardSettings.backgroundColor}>
           Track how Vitamin C affects drug levels throughout the day
         </StyledDescription>
       </StyledHeader>

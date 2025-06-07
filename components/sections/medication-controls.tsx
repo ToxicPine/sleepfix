@@ -32,8 +32,12 @@ export function MedicationDetailsCard({
       backgroundColor={cardSettings.backgroundColor}
     >
       <StyledHeader>
-        <StyledTitle>Medication Details</StyledTitle>
-        <StyledDescription>Your Vyvanse prescription info</StyledDescription>
+        <StyledTitle textColor={cardSettings.backgroundColor}>
+          Medication Details
+        </StyledTitle>
+        <StyledDescription textColor={cardSettings.backgroundColor}>
+          Your Vyvanse prescription info
+        </StyledDescription>
       </StyledHeader>
       <StyledContent>
         <StyledSlider
@@ -108,8 +112,12 @@ export function VitaminCStrategyCard({
       backgroundColor={cardSettings.backgroundColor}
     >
       <StyledHeader>
-        <StyledTitle>Vitamin C Strategy</StyledTitle>
-        <StyledDescription>Optimize your sleep intervention</StyledDescription>
+        <StyledTitle textColor={cardSettings.backgroundColor}>
+          Vitamin C Strategy
+        </StyledTitle>
+        <StyledDescription textColor={cardSettings.backgroundColor}>
+          Optimize your sleep intervention
+        </StyledDescription>
       </StyledHeader>
       <StyledContent>
         <StyledSlider
@@ -162,8 +170,12 @@ export function SleepSensitivityCard({
       backgroundColor={cardSettings.backgroundColor}
     >
       <StyledHeader>
-        <StyledTitle>Sleep Sensitivity</StyledTitle>
-        <StyledDescription>Your personal sleep threshold</StyledDescription>
+        <StyledTitle textColor={cardSettings.backgroundColor}>
+          Sleep Sensitivity
+        </StyledTitle>
+        <StyledDescription textColor={cardSettings.backgroundColor}>
+          Your personal sleep threshold
+        </StyledDescription>
       </StyledHeader>
       <StyledContent>
         <StyledSlider

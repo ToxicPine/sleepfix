@@ -53,8 +53,12 @@ export function AdvancedSettings({
             >
               <StyledHeader className="flex flex-row justify-between items-center">
                 <div className="flex flex-col text-left">
-                  <StyledTitle>{title}</StyledTitle>
-                  <StyledDescription>{description}</StyledDescription>
+                  <StyledTitle textColor={cardSettings.backgroundColor}>
+                    {title}
+                  </StyledTitle>
+                  <StyledDescription textColor={cardSettings.backgroundColor}>
+                    {description}
+                  </StyledDescription>
                 </div>
                 <ChevronDown
                   className={`${

@@ -41,8 +41,6 @@ function getEmphasizedColor(bgColor: keyof COLORS) {
     "from-purple-200 to-pink-200": bgColor === "purple",
     "from-blue-200 to-violet-200": bgColor === "blue",
     "from-green-200 to-emerald-200": bgColor === "green",
-    "from-orange-200 to-yellow-200": bgColor === "orange",
-    "from-red-200 to-rose-200": bgColor === "red",
     "from-amber-200 to-red-200": bgColor === "amber",
   });
 }

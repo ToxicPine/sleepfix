@@ -28,8 +28,10 @@ export function UrinaryPhComponent({
       backgroundColor={cardSettings.backgroundColor}
     >
       <StyledHeader>
-        <StyledTitle>Urine pH Changes</StyledTitle>
-        <StyledDescription>
+        <StyledTitle textColor={cardSettings.backgroundColor}>
+          Urine pH Changes
+        </StyledTitle>
+        <StyledDescription textColor={cardSettings.backgroundColor}>
           See how Vitamin C acidifies your urine to speed elimination
         </StyledDescription>
       </StyledHeader>

@@ -92,7 +92,7 @@ export function ConcentrationChart({
 
   // Memoize chart margins and styling objects
   const chartMargins = useMemo(
-    () => ({ top: 20, right: 40, left: 20, bottom: 40 }),
+    () => ({ top: 16, right: 0, left: 0, bottom: 16 }),
     [],
   );
 

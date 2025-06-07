@@ -33,7 +33,7 @@ export function UrinePhChart({
   axisLabelColor,
 }: UrinePhChartProps) {
   const chartMargins = useMemo(
-    () => ({ top: 10, right: 30, left: 10, bottom: 30 }),
+    () => ({ top: 16, right: 0, left: 0, bottom: 16 }),
     [],
   );
 
@@ -59,7 +59,7 @@ export function UrinePhChart({
       value: "Urine pH",
       angle: -90,
       position: "insideLeft",
-      style: { fontSize: 12, fill: colors[axisLabelColor][800] },
+      style: { fontSize: 12, fill: colors[axisLabelColor][800], margin: 0 },
     }),
     [axisLabelColor],
   );

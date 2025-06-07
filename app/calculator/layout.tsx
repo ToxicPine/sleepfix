@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function CalculatorLayout({
     <>
       <div className="max-w-6xl mx-auto w-full h-16 sm:h-20 border-t-2 shrink-0 border-gray-200 sm:border-0 sm:border-t-0 sm:z-10 bg-fixed bg-[#fffaef] flex flex-row p-6 items-center">
         <Link href="/" className="w-6 h-6 p-0 m-0 text-gray-500 cursor-pointer">
-          <ArrowLeftIcon className="w-6 h-6" />
+          <ArrowLeft className="w-6 h-6" strokeWidth={1.5} />
         </Link>
       </div>
       <div className="w-full h-full overflow-y-scroll sm:h-auto sm:overflow-visible">
